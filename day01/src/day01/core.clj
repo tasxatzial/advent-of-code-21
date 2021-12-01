@@ -3,6 +3,7 @@
 
 ; --------------------------
 ; common
+
 (def input-file "resources\\input.txt")
 
 (defn parse
@@ -14,6 +15,14 @@
 
 (def depths (parse (slurp input-file)))
 
+; --------------------------
+; results
+
+(defn day01-1
+  []
+  (let [diffs (map - depths (rest depths))]
+    (count (filter neg? diffs))))
+
 (defn -main
   []
-  (println depths))
+  (println (day01-1)))
