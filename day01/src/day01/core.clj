@@ -15,14 +15,25 @@
 
 (def depths (parse (slurp input-file)))
 
+(defn count-positive-diffs
+  "Counts the number of times an item increases from the previous item."
+  [coll]
+  (let [diffs (map - coll (rest coll))]
+    (count (filter neg? diffs))))
+
 ; --------------------------
 ; results
 
 (defn day01-1
   []
-  (let [diffs (map - depths (rest depths))]
-    (count (filter neg? diffs))))
+  (count-positive-diffs depths))
+
+(defn day01-2
+  []
+  (let [sums (map +  depths (rest depths) (rest (rest depths)))]
+    (count-positive-diffs sums)))
 
 (defn -main
   []
-  (println (day01-1)))
+  (println (day01-1))
+  (println (day01-2)))
