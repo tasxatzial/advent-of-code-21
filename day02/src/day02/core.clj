@@ -17,6 +17,27 @@
 
 (def instructions (parse (slurp input-file)))
 
+; --------------------------
+; problem 1
+
+(defn follow-instructions
+  "Starting in position 0,0, find the final position if the instructions are followed."
+  []
+  (reduce (fn [[horizontal-pos depth] [command value]]
+            (case command
+              :forward [(+ horizontal-pos value) depth]
+              :up [horizontal-pos (- depth value)]
+              :down [horizontal-pos (+ depth value)]))
+          [0 0] instructions))
+
+; --------------------------
+; results
+
+(defn day02-1
+  []
+  (let [[horizontal-pos depth] (follow-instructions)]
+    (* horizontal-pos depth)))
+
 (defn -main
   []
-  (println instructions))
+  (println (day02-1)))
