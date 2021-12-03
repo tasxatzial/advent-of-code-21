@@ -36,6 +36,19 @@
   [n]
   (map #(get % n) report))
 
+(defn char->int
+  "Converts a char to the corresponding integer."
+  [c]
+  (- (int c) 48))
+
+(defn bin->dec
+  "Converts a binary number (represented as a collection of \0 and \1)
+  to decimal."
+  [b]
+  (let [pow2 (reverse (take (count b) (iterate (partial * 2) 1)))
+        bin (map char->int b)]
+    (apply + (map * pow2 bin))))
+
 ; --------------------------
 ; problem 1
 
@@ -56,4 +69,4 @@
 
 (defn -main
   []
-  (println (calc-epsilon)))
+  (println (calc-gamma)))
