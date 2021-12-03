@@ -76,7 +76,7 @@
           most-common-digit (find-most-common nth-digits)
           most-common (filter #(= most-common-digit (get % i)) result)]
       (if (= 1 (count most-common))
-        most-common
+        (first most-common)
         (recur (inc i) most-common)))))
 
 (defn calc-co2
@@ -88,7 +88,7 @@
           least-common-digit (find-least-common nth-digit)
           least-common (filter #(= least-common-digit (get % i)) result)]
       (if (= 1 (count least-common))
-        least-common
+        (first least-common)
         (recur (inc i) least-common)))))
 
 ; --------------------------
@@ -100,7 +100,13 @@
         epsilon (bin->dec (calc-epsilon))]
     (* gamma epsilon)))
 
+(defn day03-2
+  []
+  (let [oxygen (bin->dec (calc-oxygen))
+        co2 (bin->dec (calc-co2))]
+    (* oxygen co2)))
+
 (defn -main
   []
   (println (day03-1))
-  (println (calc-co2)))
+  (println (day03-2)))
