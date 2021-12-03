@@ -53,16 +53,43 @@
 ; problem 1
 
 (defn calc-gamma
-  "Calculates the gamma value."
+  "Calculates the gamma value (in binary)."
   []
   (let [nth-digits (map #(get-nth-digit %) (range (count (first report))))]
     (map find-most-common nth-digits)))
 
 (defn calc-epsilon
-  "Calculates the epsilon value."
+  "Calculates the epsilon value (in binary)."
   []
   (let [nth-digits (map #(get-nth-digit %) (range (count (first report))))]
     (map find-least-common nth-digits)))
+
+; --------------------------
+; problem 2
+
+(defn calc-oxygen
+  "Calculates the oxygen value (in binary)."
+  []
+  (loop [i 0
+         result report]
+    (let [nth-digits (map #(get % i) result)
+          most-common-digit (find-most-common nth-digits)
+          most-common (filter #(= most-common-digit (get % i)) result)]
+      (if (= 1 (count most-common))
+        most-common
+        (recur (inc i) most-common)))))
+
+(defn calc-co2
+  "Calculates the co2 value (in binary)."
+  []
+  (loop [i 0
+         result report]
+    (let [nth-digit (map #(get % i) result)
+          least-common-digit (find-least-common nth-digit)
+          least-common (filter #(= least-common-digit (get % i)) result)]
+      (if (= 1 (count least-common))
+        least-common
+        (recur (inc i) least-common)))))
 
 ; --------------------------
 ; results
@@ -75,4 +102,5 @@
 
 (defn -main
   []
-  (println (day03-1)))
+  (println (day03-1))
+  (println (calc-co2)))
