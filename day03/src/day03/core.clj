@@ -67,6 +67,12 @@
 ; --------------------------
 ; results
 
+(defn day03-1
+  []
+  (let [gamma (bin->dec (calc-gamma))
+        epsilon (bin->dec (calc-epsilon))]
+    (* gamma epsilon)))
+
 (defn -main
   []
-  (println (calc-gamma)))
+  (println (day03-1)))
