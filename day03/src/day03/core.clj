@@ -31,6 +31,29 @@
       \0
       \1)))
 
+(defn get-nth-digit
+  "Returns the nth char of each of the binary strings."
+  [n]
+  (map #(get % n) report))
+
+; --------------------------
+; problem 1
+
+(defn calc-gamma
+  "Calculates the gamma value."
+  []
+  (let [nth-digits (map #(get-nth-digit %) (range (count (first report))))]
+    (map find-most-common nth-digits)))
+
+(defn calc-epsilon
+  "Calculates the epsilon value."
+  []
+  (let [nth-digits (map #(get-nth-digit %) (range (count (first report))))]
+    (map find-least-common nth-digits)))
+
+; --------------------------
+; results
+
 (defn -main
   []
-  (println report))
+  (println (calc-epsilon)))
