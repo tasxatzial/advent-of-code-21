@@ -13,23 +13,27 @@
 
 (def report (parse (slurp input-file)))
 
-(defn find-most-common
-  "Finds the most common bit."
-  [bits]
-  (let [ones (count (filter #{\1} bits))
-        zeros (- (count bits) ones)]
-    (if (>= ones zeros)
-      \1
-      \0)))
+(defn most-common-bit
+  "Returns the most common bit given the number of ones and zeros."
+  [ones zeros]
+  (if (>= ones zeros)
+    \1
+    \0))
 
-(defn find-least-common
-  "Finds the least common bit."
-  [bits]
+(defn least-common-bit
+  "Returns the least common bit given the number of ones and zeros."
+  [ones zeros]
+  (if (<= zeros ones)
+    \0
+    \1))
+
+(defn find-common-bit
+  "Finds the least or most common bit based on the second arg
+  which is the corresponding least/most common bit function."
+  [bits common-fn]
   (let [ones (count (filter #{\1} bits))
         zeros (- (count bits) ones)]
-    (if (<= zeros ones)
-      \0
-      \1)))
+    (common-fn ones zeros)))
 
 (defn get-nth-digit
   "Returns the nth char of each of the binary strings."
@@ -52,44 +56,48 @@
 ; --------------------------
 ; problem 1
 
-(defn calc-gamma
-  "Calculates the gamma value (in binary)."
-  []
+(defn calc-value
+  "Calculates the required values for problem 1 (in binary).
+  Accepts as an argument the least or most common bit function."
+  [common-fn]
   (let [nth-digits (map #(get-nth-digit %) (range (count (first report))))]
-    (map find-most-common nth-digits)))
+    (map #(find-common-bit % common-fn) nth-digits)))
+
+(defn calc-gamma
+  "Calculates the gamma value."
+  []
+  (calc-value most-common-bit))
 
 (defn calc-epsilon
-  "Calculates the epsilon value (in binary)."
+  "Calculates the epsilon value."
   []
-  (let [nth-digits (map #(get-nth-digit %) (range (count (first report))))]
-    (map find-least-common nth-digits)))
+  (calc-value least-common-bit))
 
 ; --------------------------
 ; problem 2
 
-(defn calc-oxygen
-  "Calculates the oxygen value (in binary)."
-  []
+(defn calc-value2
+  "Calculates the required values for problem 2 (in binary).
+  Accepts as an argument the least or most common bit function."
+  [common-fn]
   (loop [i 0
          result report]
     (let [nth-digits (map #(get % i) result)
-          most-common-digit (find-most-common nth-digits)
-          most-common (filter #(= most-common-digit (get % i)) result)]
-      (if (= 1 (count most-common))
-        (first most-common)
-        (recur (inc i) most-common)))))
+          common-digit (find-common-bit nth-digits common-fn)
+          common (filter #(= common-digit (get % i)) result)]
+      (if (= 1 (count common))
+        (first common)
+        (recur (inc i) common)))))
+
+(defn calc-oxygen
+  "Calculates the oxygen value."
+  []
+  (calc-value2 most-common-bit))
 
 (defn calc-co2
-  "Calculates the co2 value (in binary)."
+  "Calculates the CO2 value."
   []
-  (loop [i 0
-         result report]
-    (let [nth-digit (map #(get % i) result)
-          least-common-digit (find-least-common nth-digit)
-          least-common (filter #(= least-common-digit (get % i)) result)]
-      (if (= 1 (count least-common))
-        (first least-common)
-        (recur (inc i) least-common)))))
+  (calc-value2 least-common-bit))
 
 ; --------------------------
 ; results
