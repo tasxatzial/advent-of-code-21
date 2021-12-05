@@ -53,7 +53,7 @@
 
 (def starting-state (parse (slurp input-file)))
 (def draw-numbers (first starting-state))
-(def boards (second starting-state))
+(def boards (set (second starting-state)))
 
 (defn mark-row
   "Changes to 1 the mark of the number in the given row.
@@ -74,7 +74,7 @@
 (defn mark-all-boards
   "Changes to 1 the mark of the number in every board."
   [boards number]
-  (map #(mark-board % number) boards))
+  (set (map #(mark-board % number) boards)))
 
 (defn all-marked?
   "Returns true if every number (key) in the row is marked (value = 1),
@@ -88,10 +88,10 @@
   (when (some true? (map all-marked? board))
     board))
 
-(defn find-winning
-  "Finds the first winning board among the boards."
+(defn find-winnings
+  "Finds all winning boards."
   [boards]
-  (first (filter seq (map winning? boards))))
+  (filter seq (map winning? boards)))
 
 (defn collect-unmarked-row
   "Collects all unmarked numbers (value = 0) of the row."
@@ -112,17 +112,19 @@
 ; --------------------------
 ; problem 1
 
-(defn play-game
-  "Plays the game until there's a winning board. Returns a vector of two
+(defn play-game1
+  "Plays the game until there's a only one winning board. Returns a vector of two
   items. First item is the last marked number, second item is the winning board."
   []
   (loop [[number & rest-numbers] draw-numbers
          boards boards]
     (when number
       (let [new-boards (mark-all-boards boards number)
-            winning-board (find-winning new-boards)]
-        (if winning-board
-          [number winning-board]
+            winning-boards (find-winnings new-boards)]
+        (if (seq winning-boards)
+          (if (> (count winning-boards) 1)
+            nil
+            [number (first winning-boards)])
           (recur rest-numbers new-boards))))))
 
 ; --------------------------
@@ -130,7 +132,7 @@
 
 (defn day04-1
   []
-  (calculate-score (play-game)))
+  (calculate-score (play-game1)))
 
 (defn -main
   []
