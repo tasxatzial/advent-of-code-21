@@ -125,6 +125,13 @@
           [number winning-board]
           (recur rest-numbers new-boards))))))
 
+; --------------------------
+; results
+
+(defn day04-1
+  []
+  (calculate-score (play-game)))
+
 (defn -main
   []
-  (println boards))
+  (println (day04-1)))
