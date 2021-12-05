@@ -7,30 +7,30 @@
 (def input-file "resources\\input.txt")
 
 (defn parse-draw-numbers
-  "Parses the string that represents the numbers drawn and returns
-  a vector of numbers."
+  "Parses the string that represents the numbers drawn and returns a collection of numbers."
   [s]
   (let [draw-numbers (clojure.string/split s #",")]
-    (mapv #(Integer/parseInt %) draw-numbers)))
+    (map #(Integer/parseInt %) draw-numbers)))
 
 (defn create-board
   "Creates a bingo board from a collection of 25 numbers (one row every 5 numbers).
-  Returns a vector that contains
-  10 sets of 5 numbers each. Each set represents a bingo row or column."
+  Returns a collection that contains 10 maps, one for each row or column.
+  Map keys are the board numbers and their values are initialized to 0, indicating
+  that all numbers are unmarked."
   [coll]
-  (let [rows (mapv set (partition 5 coll))
+  (let [rows (map #(zipmap % (repeat 0)) (partition 5 coll))
         cols (->> coll
                   (zipmap (range 0 (count coll)))
                   (group-by #(mod (first %) 5))
                   vals
                   (map #(map second %))
-                  (mapv #(set %)))]
+                  (map #(zipmap % (repeat 0))))]
     (into rows cols)))
 
 (defn parse-boards
   "Parses a collection of lines (strings) and returns an appropriate structure that represents
   all bingo boards. The lines are all the lines in the input file except the first one.
-  Returns a vector containing vectors. Each vector is the return value of create-board."
+  Returns a collection of collections. Each collection is the return value of create-board."
   [coll]
   (->> coll
        (filter seq)
@@ -39,7 +39,7 @@
        flatten
        (map #(Integer/parseInt %))
        (partition 25)
-       (mapv create-board)))
+       (map create-board)))
 
 (defn parse
   "Splits the input string by newline and creates the structures that represent the drawn
@@ -57,4 +57,4 @@
 
 (defn -main
   []
-  (println draw-numbers))
+  (println boards))
