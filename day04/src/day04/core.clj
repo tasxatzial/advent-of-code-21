@@ -109,6 +109,22 @@
   (let [unmarked-numbers (collect-unmarked-numbers board)]
     (* last-marked (apply + unmarked-numbers))))
 
+; --------------------------
+; problem 1
+
+(defn play-game
+  "Plays the game until there's a winning board. Returns a vector of two
+  items. First item is the last marked number, second item is the winning board."
+  []
+  (loop [[number & rest-numbers] draw-numbers
+         boards boards]
+    (when number
+      (let [new-boards (mark-all-boards boards number)
+            winning-board (find-winning new-boards)]
+        (if winning-board
+          [number winning-board]
+          (recur rest-numbers new-boards))))))
+
 (defn -main
   []
   (println boards))
