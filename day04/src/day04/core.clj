@@ -93,6 +93,22 @@
   [boards]
   (first (filter seq (map winning? boards))))
 
+(defn collect-unmarked-row
+  "Collects all unmarked numbers (value = 0) of the row."
+  [row]
+  (map first (filter #(zero? (second %)) row)))
+
+(defn collect-unmarked-numbers
+  "Collects all unmarked numbers (value = 0) of the board."
+  [board]
+  (reduce into #{} (map collect-unmarked-row board)))
+
+(defn calculate-score
+  "Calculates the score of the board."
+  [[last-marked board]]
+  (let [unmarked-numbers (collect-unmarked-numbers board)]
+    (* last-marked (apply + unmarked-numbers))))
+
 (defn -main
   []
   (println boards))
