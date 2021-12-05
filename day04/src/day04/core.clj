@@ -55,6 +55,27 @@
 (def draw-numbers (first starting-state))
 (def boards (second starting-state))
 
+(defn mark-row
+  "Changes to 1 the mark of the number in the given row.
+  Returns a map, keys are the numbers and their values
+  is either 1 or 0 depending on whether the number is marked or not."
+  [row number]
+  (if-let [mark (get row number)]
+    (if (zero? mark)
+      (assoc row number 1)
+      row)
+    row))
+
+(defn mark-board
+  "Changes to 1 the mark of the number in every row/col of the board."
+  [board number]
+  (map #(mark-row % number) board))
+
+(defn mark-all-boards
+  "Changes to 1 the mark of the number in every board."
+  [boards number]
+  (map #(mark-board % number) boards))
+
 (defn -main
   []
   (println boards))
