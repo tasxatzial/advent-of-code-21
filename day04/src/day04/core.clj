@@ -76,6 +76,23 @@
   [boards number]
   (map #(mark-board % number) boards))
 
+(defn all-marked?
+  "Returns true if every number (key) in the row is marked (value = 1),
+  false otherwise."
+  [row]
+  (= 5 (count (filter #{1} (vals row)))))
+
+(defn winning?
+  "Returns the board if the board is a winning board, nil otherwise."
+  [board]
+  (when (some true? (map all-marked? board))
+    board))
+
+(defn find-winning
+  "Finds the first winning board among the boards."
+  [boards]
+  (first (filter seq (map winning? boards))))
+
 (defn -main
   []
   (println boards))
