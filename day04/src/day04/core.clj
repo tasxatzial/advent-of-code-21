@@ -128,12 +128,36 @@
           (recur rest-numbers new-boards))))))
 
 ; --------------------------
+; problem 2
+
+(defn play-game2
+  "Plays the game until there's only one board which wins last. Returns a vector
+  of two items. First item is the last marked number, second item is the last
+  winning board."
+  []
+  (loop [[number & rest-numbers] draw-numbers
+         boards boards]
+    (when number
+      (let [new-boards (mark-all-boards boards number)
+            winning-boards (find-winnings new-boards)]
+        (if (seq winning-boards)
+          (if (= 1 (count new-boards))
+            [number (first winning-boards)]
+            (recur rest-numbers (reduce disj new-boards winning-boards)))
+          (recur rest-numbers new-boards))))))
+
+; --------------------------
 ; results
 
 (defn day04-1
   []
   (calculate-score (play-game1)))
 
+(defn day04-2
+  []
+  (calculate-score (play-game2)))
+
 (defn -main
   []
-  (println (day04-1)))
+  (println (day04-1))
+  (println (day04-2)))
