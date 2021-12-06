@@ -86,6 +86,33 @@
   (filter #(> (second %) 1) points-map))
 
 ; --------------------------
+; problem 2
+
+(defn create-diagonal-points
+  "Creates all points in a diagonal line segment."
+  [[[x1 y1] [x2 y2]]]
+  (let [minx (min x1 x2)
+        maxx (max x1 x2)
+        miny (min y1 y2)
+        maxy (max y1 y2)]
+    (if (or (and (= minx x1) (= miny y1))
+            (and (= minx x2) (= miny y2)))
+      (for [x (range minx (inc maxx))
+            :let [y (+ miny (- x minx))]]
+        [x y])
+      (for [x (range minx (inc maxx))
+            :let [y (- maxy (- x minx))]]
+        [x y]))))
+
+(defn create-points2
+  "Creates all points in a line segment."
+  [line]
+  (cond
+    (horizontal? line) (create-horizontal-points line)
+    (vertical? line) (create-vertical-points line)
+    :else (create-diagonal-points line)))
+
+; --------------------------
 ; results
 
 (defn day05-1
