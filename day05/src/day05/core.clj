@@ -43,6 +43,30 @@
   []
   (filter #(or (horizontal? %) (vertical? %)) vent-lines))
 
+(defn create-vertical-points
+  "Creates all points in a vertical line segment."
+  [[[x1 y1] [x2 y2]]]
+  (let [min (min y1 y2)
+        max (max y1 y2)]
+    (for [y (range min (inc max))]
+      [x1 y]))) []
+
+(defn create-horizontal-points
+  "Creates all points in a horizontal line segment."
+  [[[x1 y1] [x2 y2]]]
+  (let [min (min x1 x2)
+        max (max x1 x2)]
+    (for [x (range min (inc max))]
+      [x y1])))
+
+(defn create-points
+  "Creates all points in a horizontal or vertical line segment."
+  [line]
+  (cond
+    (horizontal? line) (create-horizontal-points line)
+    (vertical? line) (create-vertical-points line)
+    :else '()))
+
 (defn -main
   []
   (println (collect-horizontal-vertical-lines)))
