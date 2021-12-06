@@ -70,22 +70,36 @@
 (defn update-points-map
   "Updates the points map with all the points of a line segment.
   If the map already contains a point, its count is increased by 1."
-  [line coordinates]
-  (let [points (create-points line)]
+  [line points-map]
+  (let [line-points (create-points line)]
     (reduce (fn [result point]
               (if (get result point)
                 (update result point inc)
                 (assoc result point 1)))
-            coordinates points)))
+            points-map line-points)))
 
 (defn create-all-points
   "Creates the points map from a collection of line segments.
-  Each key represents a [x y] point and its value counts how many times
-  a line segment contains the point."
+  Each key represents a [x y] point and its value counts the line segments
+  that contain the point."
   [lines]
   (reduce #(update-points-map %2 %1) {} lines))
 
+(defn collect-at-least-two-overlaps
+  "Collects all points that are contained in at least two line segments."
+  [points-map]
+  (filter #(> (second %) 1) points-map))
+
+; --------------------------
+; results
+
+(defn day05-1
+  []
+  (->> (collect-horizontal-vertical-lines)
+       create-all-points
+       collect-at-least-two-overlaps
+       count))
 
 (defn -main
   []
-  (println (create-all-points (collect-horizontal-vertical-lines))))
+  (println (day05-1)))
