@@ -122,6 +122,14 @@
       collect-at-least-two-overlaps
       count))
 
+(defn day05-2
+  []
+  (-> vent-lines
+      (create-all-points create-points2)
+      collect-at-least-two-overlaps
+      count))
+
 (defn -main
   []
-  (println (day05-1)))
+  (println (day05-1))
+  (println (day05-2)))
