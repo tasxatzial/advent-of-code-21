@@ -8,7 +8,7 @@
 
 (defn parse-line
   "Parses a line (string) and returns a collection of 2 items, each item represents
-  a (x,y) coordinate."
+  a (x,y) point."
   [s]
   (let [split-line (clojure.string/split s #" -> |,")]
     (->> split-line
@@ -67,6 +67,25 @@
     (vertical? line) (create-vertical-points line)
     :else '()))
 
+(defn update-points-map
+  "Updates the points map with all the points of a line segment.
+  If the map already contains a point, its count is increased by 1."
+  [line coordinates]
+  (let [points (create-points line)]
+    (reduce (fn [result point]
+              (if (get result point)
+                (update result point inc)
+                (assoc result point 1)))
+            coordinates points)))
+
+(defn create-all-points
+  "Creates the points map from a collection of line segments.
+  Each key represents a [x y] point and its value counts how many times
+  a line segment contains the point."
+  [lines]
+  (reduce #(update-points-map %2 %1) {} lines))
+
+
 (defn -main
   []
-  (println (collect-horizontal-vertical-lines)))
+  (println (create-all-points (collect-horizontal-vertical-lines))))
