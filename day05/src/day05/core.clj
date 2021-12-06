@@ -38,11 +38,6 @@
   [[[x1 y1] [x2 y2]]]
   (= x1 x2))
 
-(defn collect-horizontal-vertical-lines
-  "Collects all horizontal or vertical lines."
-  []
-  (filter #(or (horizontal? %) (vertical? %)) vent-lines))
-
 (defn create-vertical-points
   "Creates all points in a vertical line segment."
   [[[x1 y1] [x2 y2]]]
@@ -59,7 +54,7 @@
     (for [x (range min (inc max))]
       [x y1])))
 
-(defn create-points
+(defn create-points1
   "Creates all points in a horizontal or vertical line segment."
   [line]
   (cond
@@ -70,8 +65,8 @@
 (defn update-points-map
   "Updates the points map with all the points of a line segment.
   If the map already contains a point, its count is increased by 1."
-  [line points-map]
-  (let [line-points (create-points line)]
+  [line points-map create-points-fn]
+  (let [line-points (create-points-fn line)]
     (reduce (fn [result point]
               (if (get result point)
                 (update result point inc)
@@ -82,8 +77,8 @@
   "Creates the points map from a collection of line segments.
   Each key represents a [x y] point and its value counts the line segments
   that contain the point."
-  [lines]
-  (reduce #(update-points-map %2 %1) {} lines))
+  [lines create-points-fn]
+  (reduce #(update-points-map %2 %1 create-points-fn) {} lines))
 
 (defn collect-at-least-two-overlaps
   "Collects all points that are contained in at least two line segments."
@@ -95,10 +90,10 @@
 
 (defn day05-1
   []
-  (->> (collect-horizontal-vertical-lines)
-       create-all-points
-       collect-at-least-two-overlaps
-       count))
+  (-> vent-lines
+      (create-all-points create-points1)
+      collect-at-least-two-overlaps
+      count))
 
 (defn -main
   []
