@@ -16,14 +16,14 @@
 (def positions (parse (slurp input-file)))
 
 (defn total-fuel
-  "Finds the total fuel when each crab moves to position x."
+  "Finds the total fuel when each crab moves into position x."
   [positions x fn_fuel]
   (->> positions
        (map #(fn_fuel % x))
        (apply +)))
 
 (defn min-fuel
-  "Finds the total fuel required when every crab moves to the position that
+  "Finds the total fuel required when every crab moves into the position that
   minimizes the total fuel consumption."
   [positions fn_min-fuel-pos fn_fuel]
   (let [min-pos (fn_min-fuel-pos positions)]
@@ -52,7 +52,7 @@
   (median positions))
 
 (defn calc-fuel1
-  "Calculates the fuel required to move in position x from pos-start (problem 1)."
+  "Calculates the fuel required for moving into position x from pos-start (problem 1)."
   [pos-start x]
   (Math/abs ^Integer (- pos-start x)))
 
@@ -69,6 +69,12 @@
   [positions]
   (mean positions))
 
+(defn calc-fuel2
+  "Calculates the fuel required for moving into position x from pos-start (problem 2)."
+  [pos-start x]
+  (let [diff (Math/abs ^Integer (- pos-start x))]
+    (/ (* diff (inc diff)) 2)))
+
 ; --------------------------
 ; results
 
@@ -76,6 +82,11 @@
   []
   (min-fuel positions find-min-fuel-pos1 calc-fuel1))
 
+(defn day07-2
+  []
+  (min-fuel positions find-min-fuel-pos2 calc-fuel2))
+
 (defn -main
   []
-  (println (day07-1)))
+  (println (day07-1))
+  (println (day07-2)))
