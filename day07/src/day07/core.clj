@@ -57,6 +57,19 @@
   (Math/abs ^Integer (- pos-start x)))
 
 ; --------------------------
+; problem 2
+
+(defn mean
+  "Returns the mean of collection of integer positions."
+  [positions]
+  (/ (apply + positions) (count positions)))
+
+(defn find-min-fuel-pos2
+  "Returns the position for which the fuel consumption is minimized (problem 2)."
+  [positions]
+  (mean positions))
+
+; --------------------------
 ; results
 
 (defn day07-1
