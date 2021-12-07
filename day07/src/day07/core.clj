@@ -33,6 +33,27 @@
         (min (total-fuel positions round-down fn_fuel)
              (total-fuel positions (inc round-down) fn_fuel))))))
 
+; --------------------------
+; problem 1
+
+(defn median
+  "Returns the median of collection of integer positions."
+  [positions]
+  (let [sorted (sort positions)
+        length (count sorted)]
+    (if (odd? length)
+      (nth sorted (/ (dec length) 2))
+      (/ (+ (nth sorted (/ length 2))
+            (nth sorted (dec (/ length 2)))) 2))))
+
+(defn find-min-fuel-pos1
+  "Returns the position for which the fuel consumption is minimized (problem 1)."
+  [positions]
+  (median positions))
+
+; --------------------------
+; results
+
 (defn -main
   []
   (println positions))
