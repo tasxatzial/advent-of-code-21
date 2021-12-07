@@ -51,9 +51,18 @@
   [positions]
   (median positions))
 
+(defn calc-fuel1
+  "Calculates the fuel required to move in position x from pos-start (problem 1)."
+  [pos-start x]
+  (Math/abs ^Integer (- pos-start x)))
+
 ; --------------------------
 ; results
 
+(defn day07-1
+  []
+  (min-fuel positions find-min-fuel-pos1 calc-fuel1))
+
 (defn -main
   []
-  (println positions))
+  (println (day07-1)))
