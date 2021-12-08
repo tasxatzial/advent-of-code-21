@@ -2,7 +2,11 @@
 
 My solutions for [advent of code 2021](https://adventofcode.com/2021). Work in progress.
 
---- Credits ---
+Unsolved problems:
+
+* Day 8 pt2
+
+## Credits
 
 Puzzles: [Eric Wastl](https://twitter.com/ericwastl)
 
