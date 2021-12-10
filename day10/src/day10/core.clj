@@ -36,17 +36,23 @@
         (let [prev-bracket (peek stack)]
           (if (= bracket (matching-bracket prev-bracket))
             (recur (pop stack) rest-brackets)
-            bracket)))
+            [:corrupted bracket])))
       (if (empty? stack)
-        :valid
-        :incomplete))))
+        [:valid []]
+        [:incomplete []]))))
+
+(defn process-all-chunks
+  []
+  (map process-chunk chunks))
+
+(def memoized-process-all-chunks (memoize process-all-chunks))
 
 ; --------------------------
 ; problem 1
 
 (defn illegal-brackets
   []
-  (filter close-brackets (map process-chunk chunks)))
+  (filter #(= :corrupted (first %)) (memoized-process-all-chunks)))
 
 (def illegal-bracket-vals
   {\) 3
@@ -59,7 +65,10 @@
 
 (defn day10-1
   []
-  (apply + (map illegal-bracket-vals (illegal-brackets))))
+  (->> (illegal-brackets)
+       (map second)
+       (map illegal-bracket-vals)
+       (apply +)))
 
 (defn -main
   []
