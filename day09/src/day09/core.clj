@@ -28,6 +28,21 @@
 (def rows (get parsed-input 0))
 (def columns (get parsed-input 1))
 
+(defn get-adjacent
+  "Returns a collection of the adjacent locations to loc."
+  [loc locations]
+  (let [top (get locations (- loc columns))
+        bottom (get locations (+ loc columns))
+        left (when (pos? (mod loc columns))
+               (get locations (dec loc)))
+        right (when (not= (dec columns) (mod loc columns))
+                (get locations (inc loc)))]
+    (remove nil? [top bottom left right])))
+
+(defn heightmap-locations
+  "Generates a vector of locations (from 0 to rows * columns -1)."
+  []
+  (vec (range (* rows columns))))
 
 (defn -main
   []
