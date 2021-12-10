@@ -118,7 +118,16 @@
   []
   (total-risk-level))
 
+(defn day09-2
+  []
+  (let [basins (find-basins)]
+    (->> basins
+         (map count)
+         sort
+         (take-last 3)
+         (apply *))))
+
 (defn -main
   []
   (println (day09-1))
-  (println (find-basins)))
+  (println (day09-2)))
