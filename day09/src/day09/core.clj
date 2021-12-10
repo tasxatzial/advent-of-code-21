@@ -71,6 +71,27 @@
             0 locations)))
 
 ; --------------------------
+; problem 2
+
+(defn get-higher-adjacent
+  "Returns the adjacent locations to loc that have values greater than the value
+  at loc. Adjacent locations with values equal to 9 are not taken into account."
+  [loc adjacent-loc]
+  (let [val (get heightmap loc)]
+    (filter #(let [adjacent-val (get heightmap %)]
+               (and (> adjacent-val val) (not= 9 adjacent-val)))
+            adjacent-loc)))
+
+(defn get-extra-higher-adjacent
+  "Returns a collection of the adjacent locations to loc that have a
+  value higher than the value at loc and do not belong to known-adjacent.
+  Adjacent locations with values equal to 9 are not taken into account."
+  [loc locations known-adjacent]
+  (let [adjacent-loc (get-adjacent loc locations)
+        higher-adjacent (get-higher-adjacent loc adjacent-loc)]
+    (filter #(not (contains? known-adjacent %)) higher-adjacent)))
+
+; --------------------------
 ; results
 
 (defn day09-1
