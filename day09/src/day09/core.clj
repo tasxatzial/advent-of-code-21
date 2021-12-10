@@ -52,7 +52,31 @@
         higher-adjacent (filter #(> (get heightmap %) val) adjacent-loc)]
     (= (count adjacent-loc) (count higher-adjacent))))
 
+(defn risk-level
+  "Returns the risk level of loc."
+  [loc]
+  (inc (get heightmap loc)))
+
+; --------------------------
+; problem 1
+
+(defn total-risk-level
+  "Returns the sum of the risk levels of all low points."
+  []
+  (let [locations (heightmap-locations)]
+    (reduce (fn [result loc]
+              (if (low-loc? loc locations)
+                (+ result (risk-level loc))
+                result))
+            0 locations)))
+
+; --------------------------
+; results
+
+(defn day09-1
+  []
+  (total-risk-level))
 
 (defn -main
   []
-  (println heightmap))
+  (println (day09-1)))
