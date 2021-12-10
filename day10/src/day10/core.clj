@@ -44,6 +44,10 @@
 ; --------------------------
 ; problem 1
 
+(defn illegal-brackets
+  []
+  (filter close-brackets (map process-chunk chunks)))
+
 (def illegal-bracket-vals
   {\) 3
    \] 57
@@ -53,6 +57,10 @@
 ; --------------------------
 ; results
 
+(defn day10-1
+  []
+  (apply + (map illegal-bracket-vals (illegal-brackets))))
+
 (defn -main
   []
-  (println chunks))
+  (println (day10-1)))
