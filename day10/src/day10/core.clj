@@ -20,6 +20,39 @@
 (def matching-bracket
   (zipmap open-brackets close-brackets))
 
+(defn open-bracket?
+  "Returns true if c is an opening bracket, false otherwise."
+  [c]
+  (contains? matching-bracket c))
+
+(defn process-chunk
+  "Returns true if the given string has properly matched brackets, false otherwise."
+  [s]
+  (loop [stack []
+         [bracket & rest-brackets] s]
+    (if bracket
+      (if (open-bracket? bracket)
+        (recur (conj stack bracket) rest-brackets)
+        (let [prev-bracket (peek stack)]
+          (if (= bracket (matching-bracket prev-bracket))
+            (recur (pop stack) rest-brackets)
+            bracket)))
+      (if (empty? stack)
+        :valid
+        :incomplete))))
+
+; --------------------------
+; problem 1
+
+(def illegal-bracket-vals
+  {\) 3
+   \] 57
+   \} 1197
+   \> 25137})
+
+; --------------------------
+; results
+
 (defn -main
   []
   (println chunks))
