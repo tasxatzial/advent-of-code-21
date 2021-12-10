@@ -91,6 +91,26 @@
         higher-adjacent (get-higher-adjacent loc adjacent-loc)]
     (filter #(not (contains? known-adjacent %)) higher-adjacent)))
 
+(defn get-basin
+  "Returns all locations that belong to a basin assuming loc is a low point."
+  ([loc locations]
+   (get-basin loc locations #{loc}))
+  ([loc locations known-adjacent]
+   (let [extra-adjacent (get-extra-higher-adjacent loc locations known-adjacent)
+         new-adjacent (into known-adjacent extra-adjacent)]
+     (reduce (fn [result adj]
+               (let [new-basin (get-basin adj locations new-adjacent)]
+                 (into result new-basin)))
+             new-adjacent extra-adjacent))))
+
+(defn find-basins
+  "Returns a collection of all basins. Each basin is the set of locations that
+  belong to it."
+  []
+  (let [locations (heightmap-locations)
+        low-locations (filter #(low-loc? % locations) locations)]
+    (map #(get-basin % locations) low-locations)))
+
 ; --------------------------
 ; results
 
@@ -100,4 +120,5 @@
 
 (defn -main
   []
-  (println (day09-1)))
+  (println (day09-1))
+  (println (find-basins)))
