@@ -44,6 +44,15 @@
   []
   (vec (range (* rows columns))))
 
+(defn low-loc?
+  "Returns true if loc is a low point, false otherwise."
+  [loc locations]
+  (let [val (get heightmap loc)
+        adjacent-loc (get-adjacent loc locations)
+        higher-adjacent (filter #(> (get heightmap %) val) adjacent-loc)]
+    (= (count adjacent-loc) (count higher-adjacent))))
+
+
 (defn -main
   []
   (println heightmap))
