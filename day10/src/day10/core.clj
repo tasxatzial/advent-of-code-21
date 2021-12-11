@@ -94,6 +94,15 @@
        (map illegal-bracket-vals)
        (apply +)))
 
+(defn day10-2
+  []
+  (let [vals (->> (incomplete-chunks)
+                  (map second)
+                  (map incomplete-chunk-val)
+                  sort)]
+    (nth vals (/ (dec (count vals)) 2))))
+
 (defn -main
   []
-  (println (day10-1)))
+  (println (day10-1))
+  (println (day10-2)))
