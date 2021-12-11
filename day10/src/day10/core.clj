@@ -25,6 +25,11 @@
   [c]
   (contains? matching-bracket c))
 
+(defn complete-chunk
+  "Finds the missing chunk of an incomplete chunk."
+  [unclosed-brackets]
+  (reverse (map matching-bracket unclosed-brackets)))
+
 (defn process-chunk
   "Returns true if the given string has properly matched brackets, false otherwise."
   [s]
@@ -39,7 +44,7 @@
             [:corrupted bracket])))
       (if (empty? stack)
         [:valid []]
-        [:incomplete []]))))
+        [:incomplete (complete-chunk stack)]))))
 
 (defn process-all-chunks
   []
@@ -59,6 +64,25 @@
    \] 57
    \} 1197
    \> 25137})
+
+; --------------------------
+; problem 2
+
+(defn incomplete-chunks
+  []
+  (filter #(= :incomplete (first %)) (memoized-process-all-chunks)))
+
+(def incomplete-bracket-vals
+  {\) 1
+   \] 2
+   \} 3
+   \> 4})
+
+(defn incomplete-chunk-val
+  [chunk]
+  (reduce (fn [result bracket]
+            (+ (incomplete-bracket-vals bracket) (* 5 result)))
+          0 chunk))
 
 ; --------------------------
 ; results
