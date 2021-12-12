@@ -131,6 +131,23 @@
        (recur reset-flashed (dec steps) flash-count))
      [energies flashes])))
 
+; --------------------------
+; problem 2
+
+
+(defn simulate2
+  "Returns the step during which all octopuses flash."
+  ([energies]
+   (simulate2 energies 1))
+  ([energies steps]
+   (let [increased-energies (increase-energies energies)
+         energies-after-flashes (next-step increased-energies)
+         flash-count (count-flashes energies-after-flashes)]
+     (if (= flash-count octopuses-count)
+       steps
+       (let [reset-flashed (reset-flashed energies-after-flashes)]
+         (recur reset-flashed (inc steps)))))))
+
 (defn -main
   []
   (println octopuses))
