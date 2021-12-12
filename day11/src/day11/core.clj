@@ -50,14 +50,14 @@
 
 (def memoized-get-adjacent (memoize get-adjacent))
 
-(defn find-flash-octopuses
+(defn find-flashes
   "Collects all octopuses that will flash in the current step."
   [octopuses]
   (filter #(and (not (second (second %)))
                 (> (first (second %)) 9))
           octopuses))
 
-(defn flash-and-reset-octopuses
+(defn flash-and-reset
   "Sets the state of each octopus in flash-octopuses to [0 true]. 0 is the new state,
   true indicates that it flashed."
   [flash-octopuses octopus]
@@ -73,7 +73,7 @@
                          (into result (memoized-get-adjacent pos)))
                        [] flash-octopuses)))
 
-(defn increase-adjacent-octopuses
+(defn increase-adjacent
   "Increases the energies of all octopuses contained in the adjacent-octopuses map by their value."
   [octopuses adjacent-octopuses]
   (reduce (fn [result [pos freq]]
@@ -82,6 +82,17 @@
                 (assoc result pos [(+ energy freq) false])
                 result)))
           octopuses adjacent-octopuses))
+
+(defn next-step
+  "Advances the simulation by one step."
+  [octopuses]
+  (let [flash-octopuses (find-flashes octopuses)]
+    (if (seq flash-octopuses)
+      (let [updated-flashed (flash-and-reset flash-octopuses octopuses)
+            adjacent (collect-adjacent-to-flash flash-octopuses)
+            updated-adjacent (increase-adjacent updated-flashed adjacent)]
+        (recur updated-adjacent))
+      octopuses)))
 
 (defn -main
   []
