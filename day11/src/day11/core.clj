@@ -101,6 +101,13 @@
             (conj result [pos [(inc energy) flashed]]))
           {} octopuses))
 
+(defn reset-flashed
+  "Marks all octopuses as not flashed at the end of each step."
+  [octopuses]
+  (reduce (fn [result [pos [energy _]]]
+            (assoc result pos [energy false]))
+          {} octopuses))
+
 (defn -main
   []
   (println octopuses))
