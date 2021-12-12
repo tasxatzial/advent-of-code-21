@@ -94,6 +94,13 @@
         (recur updated-adjacent))
       octopuses)))
 
+(defn increase-energies
+  "Increases all octopuses energies by 1."
+  [octopuses]
+  (reduce (fn [result [pos [energy flashed]]]
+            (conj result [pos [(inc energy) flashed]]))
+          {} octopuses))
+
 (defn -main
   []
   (println octopuses))
