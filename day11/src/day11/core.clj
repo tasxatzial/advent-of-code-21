@@ -108,6 +108,29 @@
             (assoc result pos [energy false]))
           {} octopuses))
 
+; --------------------------
+; problem 1
+
+(defn count-flashes
+  "Counts the number of flashes in the current step."
+  [octopuses]
+  (count (filter #(= true (second (second %))) octopuses)))
+
+(defn simulate
+  "Runs the simulation for the specified number of steps (problem 1).
+  Returns a vector of the final octopuses and the total flashes that occurred during
+  the simulation."
+  ([energies steps]
+   (simulate energies steps 0))
+  ([energies steps flashes]
+   (if (pos? steps)
+     (let [increased-energies (increase-energies energies)
+           energies-after-flashes (next-step increased-energies)
+           flash-count (+ flashes (count-flashes energies-after-flashes))
+           reset-flashed (reset-flashed energies-after-flashes)]
+       (recur reset-flashed (dec steps) flash-count))
+     [energies flashes])))
+
 (defn -main
   []
   (println octopuses))
