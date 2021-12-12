@@ -134,7 +134,6 @@
 ; --------------------------
 ; problem 2
 
-
 (defn simulate2
   "Returns the step during which all octopuses flash."
   ([energies]
@@ -148,6 +147,18 @@
        (let [reset-flashed (reset-flashed energies-after-flashes)]
          (recur reset-flashed (inc steps)))))))
 
+; --------------------------
+; results
+
+(defn day11-1
+  []
+  (second (simulate octopuses 100)))
+
+(defn day11-2
+  []
+  (simulate2 octopuses))
+
 (defn -main
   []
-  (println octopuses))
+  (println (day11-1))
+  (println (day11-2)))
