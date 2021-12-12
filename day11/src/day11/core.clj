@@ -65,6 +65,24 @@
             (assoc result pos [0 true]))
           octopus flash-octopuses))
 
+(defn collect-adjacent-to-flash
+  "Returns a map of all octopuses that are adjacent to the octopuses in flash-octopuses.
+  The value of each octopus denotes how many times it is adjacent."
+  [flash-octopuses]
+  (frequencies (reduce (fn [result [pos _]]
+                         (into result (memoized-get-adjacent pos)))
+                       [] flash-octopuses)))
+
+(defn increase-adjacent-octopuses
+  "Increases the energies of all octopuses contained in the adjacent-octopuses map by their value."
+  [octopuses adjacent-octopuses]
+  (reduce (fn [result [pos freq]]
+            (let [[energy flashed] (get octopuses pos)]
+              (if (not flashed)
+                (assoc result pos [(+ energy freq) false])
+                result)))
+          octopuses adjacent-octopuses))
+
 (defn -main
   []
   (println octopuses))
