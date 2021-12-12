@@ -50,6 +50,21 @@
 
 (def memoized-get-adjacent (memoize get-adjacent))
 
+(defn find-flash-octopuses
+  "Collects all octopuses that will flash in the current step."
+  [octopuses]
+  (filter #(and (not (second (second %)))
+                (> (first (second %)) 9))
+          octopuses))
+
+(defn flash-and-reset-octopuses
+  "Sets the state of each octopus in flash-octopuses to [0 true]. 0 is the new state,
+  true indicates that it flashed."
+  [flash-octopuses octopus]
+  (reduce (fn [result [pos _]]
+            (assoc result pos [0 true]))
+          octopus flash-octopuses))
+
 (defn -main
   []
   (println octopuses))
