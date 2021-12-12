@@ -30,6 +30,26 @@
 (def columns (get parsed-input 1))
 (def octopuses-count (* rows columns))
 
+(defn pos->index
+  "Maps position [x y] to the appropriate index in a one dimensional vector."
+  [[i j]]
+  (+ j (* i columns)))
+
+(defn get-adjacent
+  "Returns the 8 adjacent positions to [x y]."
+  [pos]
+  (let [i (quot pos columns)
+        j (mod pos columns)
+        adj-pos (for [k (range (dec i) (+ i 2))
+                      p (range (dec j) (+ j 2))]
+                  [k p])
+        valid-adj-pos (filter #(and (<= 0 (first %) (dec rows))
+                                    (<= 0 (second %) (dec columns)))
+                              adj-pos)]
+    (map pos->index valid-adj-pos)))
+
+(def memoized-get-adjacent (memoize get-adjacent))
+
 (defn -main
   []
   (println octopuses))
