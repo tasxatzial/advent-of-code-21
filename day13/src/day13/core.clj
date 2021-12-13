@@ -77,6 +77,14 @@
     \x (fold-x-axis dots axis)
     \y (fold-y-axis dots axis)))
 
+(defn fully-fold
+  "Folds the paper until all folding instructions are completed.
+  Returns the final coordinates of the dots."
+  [dots [instruction & rest-instructions]]
+  (if instruction
+    (recur (fold dots instruction) rest-instructions)
+    dots))
+
 ; --------------------------
 ; results
 
