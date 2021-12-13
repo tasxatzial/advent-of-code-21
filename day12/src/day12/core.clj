@@ -130,6 +130,18 @@
         (reduce #(conj %1 (conj updated-path %2)) [] allowed-caves)
         []))))
 
+; --------------------------
+; results
+
+(defn day12-1
+  []
+  (count (find-paths [[:start]] expand-path1)))
+
+(defn day12-2
+  []
+  (count (find-paths [[0 :start]] expand-path2)))
+
 (defn -main
   []
-  (println cave-map))
+  (println (day12-1))
+  (println (day12-2)))
