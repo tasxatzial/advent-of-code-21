@@ -112,6 +112,13 @@
   []
   (count (fold dots (first fold-instructions))))
 
+(defn day13-2
+  []
+  (let [folder-paper (fully-fold dots fold-instructions)]
+    (doseq [x (print-dots folder-paper)]
+      (println x))))
+
 (defn -main
   []
-  (println (day13-1)))
+  (println (day13-1))
+  (println (day13-2)))
