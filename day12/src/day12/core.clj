@@ -102,6 +102,34 @@
     (assoc path 0 1)
     path))
 
+(defn next-caves2
+  "Returns the caves that can be visited when we are in the last cave
+  of the path (problem 2)."
+  [cave path]
+  (let [twice-visited (twice-visited? path)
+        next-caves-expect-start (remove #(= :start %) (get cave-map cave))]
+    (if twice-visited
+      (let [path-set (set path)]
+        (remove #(and (not (contains? large-caves %))
+                      (contains? path-set %))
+                next-caves-expect-start))
+      next-caves-expect-start)))
+
+(defn expand-path2
+  "Returns a vector of all paths that can be formed by appending
+  each allowed next cave when we are in the last cave of the path (vector),
+  to the end of the given path (problem 2).
+  If there are 0 next caves and we are not in the :end cave, an empty
+  vector is returned (path is incomplete)."
+  [path]
+  (if (= :end (last path))
+    [path]
+    (let [updated-path (mark-path-if-twice-visited-cave path)
+          allowed-caves (next-caves2 (last updated-path) updated-path)]
+      (if (seq allowed-caves)
+        (reduce #(conj %1 (conj updated-path %2)) [] allowed-caves)
+        []))))
+
 (defn -main
   []
   (println cave-map))
