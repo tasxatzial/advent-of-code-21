@@ -80,6 +80,28 @@
         (reduce #(conj %1 (conj path %2)) [] allowed-caves)
         []))))
 
+; --------------------------
+; problem 2
+
+(defn twice-visited?
+  "Returns true if there is a small cave in the path that has been visited twice,
+  false otherwise."
+  [path]
+  (if (= 1 (first path))
+    true
+    (let [cave-freqs (frequencies path)]
+      (boolean (some #(and (not (contains? large-caves (first %)))
+                           (> (second %) 1))
+                     cave-freqs)))))
+
+(defn mark-path-if-twice-visited-cave
+  "Changes the first item of the path from 0 to 1 if there is a small
+  cave that appears twice."
+  [path]
+  (if (twice-visited? path)
+    (assoc path 0 1)
+    path))
+
 (defn -main
   []
   (println cave-map))
