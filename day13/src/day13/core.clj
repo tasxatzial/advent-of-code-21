@@ -47,6 +47,36 @@
 (def dots (set (first parsed-data)))
 (def fold-instructions (second parsed-data))
 
+(defn fold-y-axis
+  "Folds the paper along the given y axis (the bottom part is folded up).
+  Returns a set of the new coordinates of the dots."
+  [dots axis]
+  (reduce (fn [result [x y]]
+            (if (> y axis)
+              (let [new-y (+ axis (- axis y))]
+                (conj result [x new-y]))
+              (conj result [x y])))
+          #{} dots))
+
+(defn fold-x-axis
+  "Folds the paper along the given x axis (the right part is folded left).
+  Returns a set of the new coordinates of the dots."
+  [dots axis]
+  (reduce (fn [result [x y]]
+            (if (> x axis)
+              (let [new-x (+ axis (- axis x))]
+                (conj result [new-x y]))
+              (conj result [x y])))
+          #{} dots))
+
+(defn fold
+  "Folds the paper along the c axis (\\x or \\y).
+  Returns a set of the new coordinates of the dots."
+  [dots [c axis]]
+  (case c
+    \x (fold-x-axis dots axis)
+    \y (fold-y-axis dots axis)))
+
 (defn -main
   []
   (println fold-instructions))
