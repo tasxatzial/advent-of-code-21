@@ -1,7 +1,52 @@
 (ns day13.core
   (:gen-class))
 
+; --------------------------
+; common
+
+(def input-file "resources\\input.txt")
+
+(defn parse-points
+  "Points is a collection of strings, each string represents a coordinate and
+  corresponds to a line in the input file.
+  Returns a set of (x y) coordinates."
+  [points]
+  (->> points
+       (map #(clojure.string/split % #","))
+       flatten
+       (map #(Integer/parseInt %))
+       (partition 2)
+       set))
+
+(defn parse-folds
+  "Folds is a collection of strings, each string represents a folding instruction and
+  corresponds to a line in the input file.
+  Returns a collection of [x|y fold-axis] instructions."
+  [folds]
+  (let [split-folds (->> folds
+                         (map #(clojure.string/split % #" "))
+                         (map #(drop 2 %))
+                         flatten
+                         (map #(clojure.string/split % #"=")))]
+    (reduce (fn [res [c num]]
+              (conj res [(first c) (Integer/parseInt num)]))
+            [] split-folds)))
+
+(defn parse
+  "Parses the input string and returns a vector of two items.
+  First item is a collection of the coordinates of the paper dots as returned by
+  parse-points. Second item is a collection of the folding instructions as returned by
+  parse-folds."
+  [s]
+  (let [split-lines (clojure.string/split-lines s)
+        points (take-while #(not= "" %) split-lines)
+        folds (rest (drop-while #(not= "" %) split-lines))]
+    [(parse-points points) (parse-folds folds)]))
+
+(def parsed-data (parse (slurp input-file)))
+(def dots (set (first parsed-data)))
+(def fold-instructions (second parsed-data))
+
 (defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+  []
+  (println fold-instructions))
