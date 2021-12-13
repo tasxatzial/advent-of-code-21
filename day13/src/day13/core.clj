@@ -85,6 +85,26 @@
     (recur (fold dots instruction) rest-instructions)
     dots))
 
+(defn coordinate->char
+  "Transform a (x y) coordinate to a \\# or \\. depending on whether it has a dot."
+  [coordinate dots]
+  (if (contains? dots coordinate)
+    \#
+    \.))
+
+(defn print-dots
+  "Prints the dots in a rectangular arrangement."
+  [dots]
+  (let [max-x (apply max (map first dots))
+        max-y (apply max (map second dots))
+        coordinates (for [y (range (inc max-y))
+                          x (range (inc max-x))]
+                      [x y])]
+    (->> coordinates
+         (map #(coordinate->char % dots))
+         (partition (inc max-x))
+         (map #(apply str %)))))
+
 ; --------------------------
 ; results
 
