@@ -41,6 +41,20 @@
        (filter #(= (name %) (clojure.string/upper-case (name %))))
        set))
 
+(defn find-paths
+  "Accepts an init-path vector as the initial path collection and returns a
+  vector of all distinct paths that can be formed.
+  fn_expand-path: expands the current collection of paths.
+  fn_next-caves: indicates what caves are allowed to be visited next."
+  [init-path fn_expand-path]
+  (loop [paths init-path]
+    (let [new-paths (->> paths
+                         (map #(fn_expand-path %))
+                         (reduce into []))]
+      (if (= paths new-paths)
+        new-paths
+        (recur new-paths)))))
+
 ; --------------------------
 ; problem 1
 
