@@ -77,6 +77,13 @@
     \x (fold-x-axis dots axis)
     \y (fold-y-axis dots axis)))
 
+; --------------------------
+; results
+
+(defn day13-1
+  []
+  (count (fold dots (first fold-instructions))))
+
 (defn -main
   []
-  (println fold-instructions))
+  (println (day13-1)))
