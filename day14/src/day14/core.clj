@@ -95,6 +95,21 @@
               (update result letter #(/ (+ % frequency) 2)))
             init-frequencies letter-frequencies)))
 
+; --------------------------
+; results
+
+(defn day14
+  [steps]
+  (let [pair-frequencies (simulate steps)
+        letter-frequencies (->> pair-frequencies
+                                collect-letter-frequencies
+                                finalize-letter-frequencies)
+        frequencies (map second letter-frequencies)
+        max-letter-frequency (apply max frequencies)
+        min-letter-frequency (apply min frequencies)]
+    (- max-letter-frequency min-letter-frequency)))
+
 (defn -main
   []
-  (println (simulate 10)))
+  (println (day14 10))
+  (println (day14 40)))
