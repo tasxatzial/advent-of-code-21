@@ -53,6 +53,16 @@
                   (assoc new-right (+ frequency new-right-frequency)))))
           {} pair-frequencies))
 
+(defn simulate
+  "Runs the simulation for the given number of steps.
+  Returns a final map of the polymer pair frequencies."
+  ([steps]
+   (simulate steps (initialize-pair-frequencies)))
+  ([steps pair-frequencies]
+   (if (pos? steps)
+     (recur (dec steps) (next-pair-frequencies pair-frequencies))
+     pair-frequencies)))
+
 (defn -main
   []
-  (println rules))
+  (println (simulate 10)))
