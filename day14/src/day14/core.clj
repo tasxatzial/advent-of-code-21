@@ -63,6 +63,38 @@
      (recur (dec steps) (next-pair-frequencies pair-frequencies))
      pair-frequencies)))
 
+(defn collect-letter-frequencies
+  "Takes a map of the frequencies of the polymer pairs and returns a
+  map of the frequencies of each letter. The frequency of each letter
+  is the sum of the frequencies of the pairs that contain the letter."
+  [pair-frequencies]
+  (let [letters (into #{} (flatten (map first pair-frequencies)))
+        letter-frequencies (zipmap letters (repeat 0))]
+    (reduce (fn [result [[left right] frequency]]
+              (-> result
+                  (update left #(+ % frequency))
+                  (update right #(+ % frequency))))
+            letter-frequencies pair-frequencies)))
+
+(defn finalize-letter-frequencies
+  "Receives a map of initial letter frequencies as returned by
+  collect-letter-frequencies and calculates the final letter frequencies.
+  The final frequency of a letter is calculated as:
+  1) If it is not the first or last letter of the initial polymer:
+     divide the initial frequency by 2.
+  2) If it is the first or the last letter (but not both) of the initial polymer:
+     add 1 to the initial frequency and divide by 2.
+  3) If it is both the first and last letter of the initial polymer:
+     add 2 to the initial frequency and divide by 2."
+  [letter-frequencies]
+  (let [zero-frequencies (zipmap (keys letter-frequencies) (repeat 0))
+        init-frequencies (-> zero-frequencies
+                             (update (first polymer) inc)
+                             (update (last polymer) inc))]
+    (reduce (fn [result [letter frequency]]
+              (update result letter #(/ (+ % frequency) 2)))
+            init-frequencies letter-frequencies)))
+
 (defn -main
   []
   (println (simulate 10)))
