@@ -34,6 +34,25 @@
 (def polymer (first parsed-input))
 (def rules (second parsed-input))
 
+(defn initialize-pair-frequencies
+  "Initializes a map with the frequencies of the polymer pairs."
+  []
+  (frequencies (map #(vector %1 %2) polymer (rest polymer))))
+
+(defn next-pair-frequencies
+  "Returns the new frequencies of the polymer pairs after one step."
+  [pair-frequencies]
+  (reduce (fn [result [[left-letter right-letter :as pair] frequency]]
+            (let [new-letter (get rules pair)
+                  new-left [left-letter new-letter]
+                  new-right [new-letter right-letter]
+                  new-left-frequency (get result new-left 0)
+                  new-right-frequency (get result new-right 0)]
+              (-> result
+                  (assoc new-left (+ frequency new-left-frequency))
+                  (assoc new-right (+ frequency new-right-frequency)))))
+          {} pair-frequencies))
+
 (defn -main
   []
   (println rules))
