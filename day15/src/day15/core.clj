@@ -54,6 +54,14 @@
          (recur new-queue new-visited))
        visited))))
 
+; --------------------------
+; results
+
+(defn day15
+  [rows columns]
+  (let [final-coordinates (find-min-sum  rows columns)]
+    (get final-coordinates [(dec rows) (dec columns)])))
+
 (defn -main
   []
-  (println (find-min-sum rows columns)))
+  (println (day15 rows columns)))
