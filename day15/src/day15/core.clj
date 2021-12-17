@@ -24,12 +24,21 @@
 (def rows (count risk-levels))
 (def columns (count (first risk-levels)))
 
+(defn get-risk
+  "Returns the risk at the given location [x y]."
+  [[x y]]
+  (let [risk (get-in risk-levels [(rem x rows) (rem y columns)])
+        new-risk (+ risk (quot x rows) (quot y columns))]
+    (if (>= new-risk 10)
+      (- new-risk 9)
+      new-risk)))
+
 (defn process-adjacent
   "Updates the queue location cost when given a known from-cost."
   [queue visited loc from-cost x-or-y invalid-x-or-y]
   (if (or (= x-or-y invalid-x-or-y) (contains? visited loc))
     queue
-    (let [new-cost (+ from-cost (get-in risk-levels loc))
+    (let [new-cost (+ from-cost (get-risk loc))
           curr-cost (get queue loc)]
       (if (or (not curr-cost) (< new-cost curr-cost))
         (assoc queue loc new-cost)
@@ -64,4 +73,5 @@
 
 (defn -main
   []
-  (println (day15 rows columns)))
+  (println (day15 rows columns))
+  (println (day15 (* rows 5) (* columns 5))))
