@@ -34,7 +34,14 @@
       new-risk)))
 
 (defn process-adjacent
-  "Updates the queue location cost when given a known from-cost."
+  "Updates the cost of loc when given a known from-cost and enqueues loc.
+  (if not already in queue).
+  Visited: map of [location -> min total cost]. If visited contains loc then
+  it's cost won't change and loc won't be enqueued.
+  x-or-y: It is the x of loc if loc is a up or bottom adjacent, y otherwise.
+  invalid-x-or-y: a value of x-or-y that is considered invalid, this is used
+  for checking whether loc is invalid. It is -1 if loc is top or left adjacent,
+  rows if loc is bottom adjacent, columns if loc is right adjacent."
   [queue visited loc from-cost x-or-y invalid-x-or-y]
   (if (or (= x-or-y invalid-x-or-y) (contains? visited loc))
     queue
