@@ -56,6 +56,26 @@
         z (range left-z (inc right-z))]
     [x y z]))
 
+(defn apply-instructions1
+  "Applies the instructions (problem 1). Returns a set of the cubes that are
+  on at the end of the process."
+  []
+  (let [p1-instructions (filter #(less-than-50? (get % 1) (get % 2) (get % 3))
+                                instructions)]
+    (reduce (fn [result [command x-range y-range z-range]]
+              (let [cube (set (create-cube x-range y-range z-range))]
+                (if (= :on command)
+                  (union result cube)
+                  (difference result cube))))
+            #{} p1-instructions)))
+
+; --------------------------
+; results
+
+(defn day22-1
+  []
+  (count (apply-instructions1)))
+
 (defn -main
   []
-  (println instructions))
+  (println (day22-1)))
