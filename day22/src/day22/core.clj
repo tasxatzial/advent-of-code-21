@@ -47,6 +47,15 @@
         (less-than-50? y-range)
         (less-than-50? z-range))))
 
+(defn create-cube
+  "Returns all cubes that are part of the cuboid specified by the given
+  x,y,z ranges."
+  [[left-x right-x] [left-y right-y] [left-z right-z]]
+  (for [x (range left-x (inc right-x))
+        y (range left-y (inc right-y))
+        z (range left-z (inc right-z))]
+    [x y z]))
+
 (defn -main
   []
   (println instructions))
