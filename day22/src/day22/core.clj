@@ -34,6 +34,19 @@
 
 (def instructions (parse (slurp input-file)))
 
+; --------------------------
+; problem 1
+
+(defn less-than-50?
+  "Returns true if for every range, the left number is >= -50
+  and the right number is <= 50."
+  ([[left right]]
+   (and (>= left -50) (<= right 50)))
+  ([x-range y-range z-range]
+   (and (less-than-50? x-range)
+        (less-than-50? y-range)
+        (less-than-50? z-range))))
+
 (defn -main
   []
   (println instructions))
