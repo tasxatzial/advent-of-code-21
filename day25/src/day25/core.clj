@@ -72,6 +72,29 @@
         new-south-cucumbers (move south-cucumbers new-east-cucumbers next-south-loc)]
     [new-east-cucumbers new-south-cucumbers]))
 
+; --------------------------
+; problem 1
+
+(defn simulate
+  "Runs the simulation until no cucumbers move. Returns the number of steps required
+  to get to that state."
+  ([]
+   (let [east-cucumbers (collect-east-cucumbers)
+         south-cucumbers (collect-south-cucumbers)]
+     (simulate 1 [east-cucumbers south-cucumbers])))
+  ([steps [east-cucumbers south-cucumbers]]
+   (let [[new-east-cucumbers new-south-cucumbers :as next-state] (move-once east-cucumbers south-cucumbers)]
+     (if (and (= east-cucumbers new-east-cucumbers) (= south-cucumbers new-south-cucumbers))
+       steps
+       (recur (inc steps) next-state)))))
+
+; --------------------------
+; results
+
+(defn day25-1
+  []
+  (simulate))
+
 (defn -main
   []
-  (println sea-cucumbers))
+  (println (day25-1)))
