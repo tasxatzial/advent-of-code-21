@@ -107,13 +107,13 @@
   of the path (problem 2)."
   [cave path]
   (let [twice-visited (twice-visited? path)
-        next-caves-expect-start (remove #(= :start %) (get cave-map cave))]
+        next-caves-except-start (remove #(= :start %) (get cave-map cave))]
     (if twice-visited
       (let [path-set (set path)]
         (remove #(and (not (contains? large-caves %))
                       (contains? path-set %))
-                next-caves-expect-start))
-      next-caves-expect-start)))
+                next-caves-except-start))
+      next-caves-except-start)))
 
 (defn expand-path2
   "Returns a vector of all paths that can be formed by appending
