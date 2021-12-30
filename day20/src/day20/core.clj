@@ -45,6 +45,15 @@
 (def rows (get parsed-input 2))
 (def columns (get parsed-input 3))
 
+; powers of two: (256 128 ... 1)
+(def powers2 (reverse (take 9 (iterate (partial * 2) 1))))
+
+(defn bin->dec
+  "Converts a binary number to decimal."
+  [binary]
+  (apply + (map * powers2 binary)))
+
+
 (defn -main
   []
   (println image))
