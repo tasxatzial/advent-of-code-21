@@ -129,6 +129,33 @@
         (into (zipmap left-border (repeat background-bit)))
         (into (zipmap right-border (repeat background-bit))))))
 
+(defn enhance-pixel
+  "Returns the new value of a pixel at loc after enhancing it once."
+  [image loc background-bit]
+  (let [loc-square (get-square loc)
+        square-values (map #(get image % background-bit) loc-square)
+        decimal (bin->dec square-values)]
+    (get algorithm decimal)))
+
+(defn enhance-image
+  "Enhances the image steps times."
+  ([steps]
+   (enhance-image steps image 0 borders))
+  ([image background-bit]
+   (reduce (fn [result pixel]
+             (let [loc (first pixel)
+                   new-pixel-value (enhance-pixel image loc background-bit)]
+               (assoc result loc new-pixel-value)))
+           {} image))
+  ([steps image background-bit borders]
+   (if (zero? steps)
+     image
+     (let [new-borders (expand-borders borders)
+           expanded-image (expand-image image borders background-bit)
+           enhanced-image (enhance-image expanded-image background-bit)
+           new-background-bit (if (= 1 background-bit) 0 (get algorithm 0))]
+       (recur (dec steps) enhanced-image new-background-bit new-borders)))))
+
 ; --------------------------
 ; results
 
