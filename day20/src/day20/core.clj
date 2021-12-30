@@ -67,6 +67,9 @@
         bottom-right [(inc x) (inc y)]]
     [top-left top top-right left center right bottom-left bottom bottom-right]))
 
+; --------------------------
+; solution 1
+
 (declare memoized-pixel-value)
 
 (defn pixel-value
@@ -90,14 +93,31 @@
     [i j]))
 
 ; --------------------------
+; solution 2
+
+(def borders {:top-row 0
+              :bottom-row (dec rows)
+              :left-column 0
+              :right-column (dec columns)})
+
+(defn expand-borders
+  "Expands each image border by 1. Left and top borders are decreased by 1.
+  Bottom and right borders are increased by 1."
+  [borders]
+  {:top-row (dec (:top-row borders))
+   :bottom-row (inc (:bottom-row borders))
+   :left-column (dec (:left-column borders))
+   :right-column (inc (:right-column borders))})
+
+; --------------------------
 ; results
 
-(defn day20
+(defn day20_sol1
   [steps]
   (let [img-range (image-range steps)]
     (apply + (map #(pixel-value % steps) img-range))))
 
 (defn -main
   []
-  (println (day20 2))
-  (println (day20 50)))
+  (println (day20_sol1 2))
+  (println (day20_sol1 50)))
