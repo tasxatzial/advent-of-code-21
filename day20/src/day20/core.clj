@@ -53,6 +53,34 @@
   [binary]
   (apply + (map * powers2 binary)))
 
+(defn get-square
+  "Returns a vector that contains the 9 locations that form a 3x3 square around [x y]."
+  [[x y]]
+  (let [top-left [(dec x) (dec y)]
+        top [(dec x) y]
+        top-right [(dec x) (inc y)]
+        left [x (dec y)]
+        center [x y]
+        right [x (inc y)]
+        bottom-left [(inc x) (dec y)]
+        bottom [(inc x) y]
+        bottom-right [(inc x) (inc y)]]
+    [top-left top top-right left center right bottom-left bottom bottom-right]))
+
+(declare memoized-pixel-value)
+
+(defn pixel-value
+  "Returns the value of the pixel (0 or 1) at the given location after the image has been
+  enhanced step times."
+  [loc step]
+  (if (zero? step)
+    (get image loc 0)
+    (let [loc-square (get-square loc)
+          new-square-values (map #(memoized-pixel-value % (dec step)) loc-square)
+          decimal (bin->dec new-square-values)]
+      (get algorithm decimal))))
+
+(def memoized-pixel-value (memoize pixel-value))
 
 (defn -main
   []
