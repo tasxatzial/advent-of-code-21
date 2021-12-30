@@ -82,6 +82,22 @@
 
 (def memoized-pixel-value (memoize pixel-value))
 
+(defn image-range
+  "Returns all the locations that are part of the image after enhancing it step times."
+  [steps]
+  (for [i (range (- steps) (+ columns steps))
+        j (range (- steps) (+ rows steps))]
+    [i j]))
+
+; --------------------------
+; results
+
+(defn day20
+  [steps]
+  (let [img-range (image-range steps)]
+    (apply + (map #(pixel-value % steps) img-range))))
+
 (defn -main
   []
-  (println image))
+  (println (day20 2))
+  (println (day20 50)))
