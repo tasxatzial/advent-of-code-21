@@ -164,7 +164,15 @@
   (let [img-range (image-range steps)]
     (apply + (map #(pixel-value % steps) img-range))))
 
+(defn day20_sol2
+  [steps]
+  (let [enhanced-image (enhance-image steps)
+        pixel-values (map second enhanced-image)]
+    (apply + pixel-values)))
+
 (defn -main
   []
-  (println (day20_sol1 2))
-  (println (day20_sol1 50)))
+  (println (time (day20_sol1 2)))
+  (println (time (day20_sol2 2)))
+  (println (time (day20_sol1 50)))
+  (println (time (day20_sol2 50))))
