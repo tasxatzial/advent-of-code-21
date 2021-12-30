@@ -109,6 +109,26 @@
    :left-column (dec (:left-column borders))
    :right-column (inc (:right-column borders))})
 
+(defn expand-image
+  "Expands the image by adding to it the pixels around the current image border.
+  The value of those new pixels is the background-bit (0 or 1)."
+  [image {:keys [top-row bottom-row left-column right-column]} background-bit]
+  (let [top-bottom-range (range (dec left-column) (+ 2 right-column))
+        left-right-range (range top-row (inc bottom-row))
+        top-border (for [j top-bottom-range]
+                     [(dec top-row) j])
+        bottom-border (for [j top-bottom-range]
+                        [(inc bottom-row) j])
+        left-border (for [i left-right-range]
+                      [i (dec left-column)])
+        right-border (for [i left-right-range]
+                       [i (inc right-column)])]
+    (-> image
+        (into (zipmap top-border (repeat background-bit)))
+        (into (zipmap bottom-border (repeat background-bit)))
+        (into (zipmap left-border (repeat background-bit)))
+        (into (zipmap right-border (repeat background-bit))))))
+
 ; --------------------------
 ; results
 
