@@ -31,8 +31,17 @@
              (<= target-xmin y target-xmax)) true
         :else (recur (dec vel-y) x-new (+ x vel-y) (+ y vel-x))))))
 
+(defn acceptable-velocities
+  "Returns a vector of all velocities [x0 y0] that cause the probe to be within the target
+  area after any step."
+  []
+  (let [xy-vals (for [x (range min-vel-x (inc max-vel-x))
+                      y (range min-vel-y (inc max-vel-y))]
+                  [x y])]
+    (->> xy-vals
+         (map #(and (inside-target? %) %))
+         (filter (complement false?)))))
 
 (defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+  []
+  (println (acceptable-velocities)))
