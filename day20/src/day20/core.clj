@@ -1,6 +1,8 @@
 (ns day20.core
   (:gen-class))
 
+; solution depends on the input
+
 ; --------------------------
 ; common
 
