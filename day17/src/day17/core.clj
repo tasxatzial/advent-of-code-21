@@ -42,6 +42,22 @@
          (map #(and (inside-target? %) %))
          (filter (complement false?)))))
 
+(defn find-max-height
+  "Returns the max height the probe reaches given its initial y velocity."
+  [vel-y0]
+  (if (neg? vel-y0)
+    0
+    (/ (* vel-y0 (inc vel-y0)) 2)))
+
+; --------------------------
+; results
+
+(defn day17-1
+  []
+  (->> (acceptable-velocities)
+       (map #(find-max-height (second %)))
+       (apply max)))
+
 (defn -main
   []
-  (println (acceptable-velocities)))
+  (println (day17-1)))
