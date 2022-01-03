@@ -1,7 +1,7 @@
 (ns day17.core
   (:gen-class))
 
-; the solution below depends on the input
+; solution depends on the input
 
 ; --------------------------
 ; common
@@ -62,7 +62,12 @@
   []
   (/ (* target-ymin (inc target-ymin)) 2))
 
+(defn day17-2
+  []
+  (count (acceptable-velocities)))
+
 (defn -main
   []
   (println (time (day17-1-sol1)))
-  (println (time (day17-1-sol2))))
+  (println (time (day17-1-sol2)))
+  (println (day17-2)))
