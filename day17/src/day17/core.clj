@@ -52,12 +52,17 @@
 ; --------------------------
 ; results
 
-(defn day17-1
+(defn day17-1-sol1
   []
   (->> (acceptable-velocities)
        (map #(find-max-height (second %)))
        (apply max)))
 
+(defn day17-1-sol2
+  []
+  (/ (* target-ymin (inc target-ymin)) 2))
+
 (defn -main
   []
-  (println (day17-1)))
+  (println (time (day17-1-sol1)))
+  (println (time (day17-1-sol2))))
