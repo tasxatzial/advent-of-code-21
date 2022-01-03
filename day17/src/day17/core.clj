@@ -15,6 +15,23 @@
 (def min-vel-y target-ymin)
 (def max-vel-y (- target-ymin))
 
+(defn inside-target?
+  "Returns true if the given initial velocity causes the probe to be within the target
+  area after any step."
+  [[vel-x0 vel-y0]]
+  (loop [vel-y vel-y0
+         vel-x vel-x0
+         x 0
+         y 0]
+    (let [y-prev (- x (inc vel-y))
+          x-new (if (pos? vel-x) (dec vel-x) 0)]
+      (cond
+        (and (> y-prev x) (< x target-ymin)) false
+        (and (<= target-ymin x target-ymax)
+             (<= target-xmin y target-xmax)) true
+        :else (recur (dec vel-y) x-new (+ x vel-y) (+ y vel-x))))))
+
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
