@@ -33,40 +33,45 @@
       (- new-risk 9)
       new-risk)))
 
-(defn process-adjacent
-  "Updates the cost of loc when given a known from-cost and enqueues loc.
-  (if not already in queue).
-  Visited: map of [location -> min total cost]. If visited contains loc then
-  it's cost won't change and loc won't be enqueued.
-  x-or-y: It is the x of loc if loc is a up or bottom adjacent, y otherwise.
-  invalid-x-or-y: a value of x-or-y that is considered invalid, this is used
-  for checking whether loc is invalid. It is -1 if loc is top or left adjacent,
-  rows if loc is bottom adjacent, columns if loc is right adjacent."
-  [queue visited loc from-cost x-or-y invalid-x-or-y]
-  (if (or (= x-or-y invalid-x-or-y) (contains? visited loc))
-    queue
-    (let [new-cost (+ from-cost (get-risk loc))
-          curr-cost (get queue loc)]
-      (if (or (not curr-cost) (< new-cost curr-cost))
-        (assoc queue loc new-cost)
-        queue))))
+(defn invalid-loc?
+  "Returns true if both x and y are within bounds, false otherwise."
+  [[x y] rows columns]
+  (or (< x 0) (< y 0) (>= x rows) (>= y columns)))
 
-(defn find-min-sum
-  "Returns a map of [location -> total risk cost to location]. Start location is top-left."
+(defn get-adjacent
+  "Returns a vector of the 4 adjacent locations to [x y]."
+  [[x y]]
+  [[(inc x) y] [x (inc y)] [x (dec y)] [(dec x) y]])
+
+(defn process-adjacent
+  "Updates the cost of the adjacent locations to loc when given a known cost to loc
+  and enqueues the adjacent loc (unless visited already contains the adjacent loc,
+  in that case it won't be enqueued and its cost won't change).
+  Visited: map of {loc -> min total cost to loc}."
+  [queue loc cost visited rows columns]
+  (reduce (fn [result adj-loc]
+            (if (or (invalid-loc? adj-loc rows columns) (contains? visited adj-loc))
+              result
+              (let [new-cost (+ cost (get-risk adj-loc))
+                    curr-cost (get result adj-loc)]
+                (if (or (not curr-cost) (< new-cost curr-cost))
+                  (assoc result adj-loc new-cost)
+                  result))))
+          queue (get-adjacent loc)))
+
+(defn find-min-risks
+  "Returns a map of {location -> total risk to location}. Start location is top-left."
   ([rows columns]
    (let [queue (priority-map [0 0] 0)]
-     (find-min-sum queue {} rows columns)))
+     (find-min-risks queue {} rows columns)))
   ([queue visited rows columns]
    (loop [queue queue
           visited visited]
-     (if-let [[[x y :as loc] from-cost] (first queue)]
+     (if-let [[loc cost] (first queue)]
        (let [new-queue (-> queue
-                           (process-adjacent visited [(inc x) y] from-cost (inc x) rows)
-                           (process-adjacent visited [x (inc y)] from-cost (inc y) columns)
-                           (process-adjacent visited [x (dec y)] from-cost (dec y) -1)
-                           (process-adjacent visited [(dec x) y] from-cost (dec x) -1)
+                           (process-adjacent loc cost visited rows columns)
                            (dissoc loc))
-             new-visited (assoc visited loc from-cost)]
+             new-visited (assoc visited loc cost)]
          (recur new-queue new-visited))
        visited))))
 
@@ -75,8 +80,8 @@
 
 (defn day15
   [rows columns]
-  (let [final-coordinates (find-min-sum  rows columns)]
-    (get final-coordinates [(dec rows) (dec columns)])))
+  (let [min-risks (find-min-risks rows columns)]
+    (get min-risks [(dec rows) (dec columns)])))
 
 (defn -main
   []
