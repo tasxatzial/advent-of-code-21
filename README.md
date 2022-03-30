@@ -1,18 +1,13 @@
-# Advent of code 2021
+# Advent of code solutions (2021)
 
-My solutions for [advent of code 2021](https://adventofcode.com/2021).
+[Advent of Code](https://adventofcode.com) is an annual set of Christmas-themed computer programming challenges that follow an Advent calendar. It has been running since 2015.
 
-Todo:
+The programming puzzles cover a variety of skill sets and skill levels and can be solved using any programming language. Participants also compete based on speed on both global and private leaderboards.
 
-* Day 8 pt2
-* Day 21 pt2
-* Day 16, 18, 19, 23, 24
-* Day 22 pt2
-* Day 25 pt2
+---
 
-## Algorithms
+This repo contains my solutions to the problems for the year 2021.
 
-Here's a list of notable data structures and algorithms that were used in the solutions.
+## Implemented algorithms
 
-* [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
-  * Day 15
+* Day 15: [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
